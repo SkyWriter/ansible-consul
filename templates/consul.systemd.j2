@@ -5,7 +5,11 @@ Description=Consul Agent
 Environment="GOMAXPROCS=`nproc`"
 User={{ consul_user }}
 Group={{ consul_group }}
+{% if consul_is_ui %}
+ExecStart={{ consul_home }}/bin/consul agent -ui-dir {{ consul_ui_dir }} -config-dir {{ consul_config_dir }} -config-file={{ consul_config_file }} >> {{ consul_log_file }} 2>&1
+{% else %}
 ExecStart={{ consul_home }}/bin/consul agent -config-dir {{ consul_config_dir }} -config-file={{ consul_config_file }} >> {{ consul_log_file }} 2>&1
+{% endif %}
 
 [Install]
 WantedBy=multi-user.target
